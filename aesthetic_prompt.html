@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Prompt Modal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS for the Aesthetic Prompt Modal --- */
+
+        /* Variables from "Obsidian Note" Aesthetic */
+        :root {
+            --color-background: #121212;
+            --color-card: #1E1E1E;
+            --color-text-primary: #E0E0E0;
+            --color-text-secondary: #A0A0A0;
+            --color-accent: #BB86FC; /* Vibrant Violet */
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        /* Global Styles (Minimal ) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background-color: #282c34; /* Placeholder background */
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Modal Structure --- */
+
+        /* The Overlay */
+        #aesthetic-prompt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #aesthetic-prompt-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* The Modal Content */
+        #aesthetic-prompt-modal {
+            background-color: var(--color-card);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px; /* Smaller size for a prompt */
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #aesthetic-prompt-overlay.active #aesthetic-prompt-modal {
+            transform: scale(1);
+        }
+
+        /* --- Content Styling --- */
+
+        #prompt-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--color-text-primary);
+        }
+
+        #prompt-input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--color-background);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+
+        #prompt-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);
+        }
+
+        /* --- Buttons --- */
+        .prompt-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .prompt-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            font-weight: 700;
+        }
+
+        #prompt-ok-btn {
+            background-color: var(--color-accent);
+            color: var(--color-background);
+        }
+
+        #prompt-ok-btn:hover {
+            background-color: #A572F0;
+        }
+
+        #prompt-cancel-btn {
+            background-color: var(--color-card);
+            color: var(--color-text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #prompt-cancel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- The Aesthetic Prompt Modal Structure (Place this at the end of your <body> tag) -->
+    <div id="aesthetic-prompt-overlay">
+        <div id="aesthetic-prompt-modal">
+            <p id="prompt-title">Enter your value:</p>
+            <input type="text" id="prompt-input">
+            <div class="prompt-actions">
+                <button class="prompt-button" id="prompt-cancel-btn">Cancel</button>
+                <button class="prompt-button" id="prompt-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example button to test the prompt (You will replace this with your actual buttons) -->
+    <button onclick="testPrompt()" style="padding: 10px 20px; background: var(--color-accent); color: var(--color-background); border: none; border-radius: 6px; font-family: var(--font-mono); cursor: pointer;">Test Aesthetic Prompt</button>
+
+    <script>
+        const overlay = document.getElementById('aesthetic-prompt-overlay');
+        const titleElement = document.getElementById('prompt-title');
+        const inputElement = document.getElementById('prompt-input');
+        const okButton = document.getElementById('prompt-ok-btn');
+        const cancelButton = document.getElementById('prompt-cancel-btn');
+
+        /**
+         * Displays an aesthetic prompt modal and returns a Promise that resolves with the user's input.
+         * @param {string} title The message to display in the prompt.
+         * @param {string} [defaultValue=''] The default value for the text input.
+         * @returns {Promise<string|null>} The user's input string, or null if canceled.
+         */
+        function aestheticPrompt(title, defaultValue = '') {
+            return new Promise(resolve => {
+                // 1. Setup the modal content
+                titleElement.textContent = title;
+                inputElement.value = defaultValue;
+                inputElement.focus();
+
+                // 2. Show the modal
+                overlay.classList.add('active');
+
+                // 3. Define the handlers
+                const handleOk = () => {
+                    cleanup();
+                    resolve(inputElement.value);
+                };
+
+                const handleCancel = () => {
+                    cleanup();
+                    resolve(null);
+                };
+
+                const handleKeydown = (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault(); // Prevent form submission if any
+                        handleOk();
+                    } else if (e.key === 'Escape') {
+                        handleCancel();
+                    }
+                };
+
+                // 4. Attach event listeners
+                okButton.addEventListener('click', handleOk);
+                cancelButton.addEventListener('click', handleCancel);
+                inputElement.addEventListener('keydown', handleKeydown);
+
+                // 5. Cleanup function to remove listeners and hide modal
+                const cleanup = () => {
+                    overlay.classList.remove('active');
+                    okButton.removeEventListener('click', handleOk);
+                    cancelButton.removeEventListener('click', handleCancel);
+                    inputElement.removeEventListener('keydown', handleKeydown);
+                };
+
+                // Optional: Close on overlay click
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        handleCancel();
+                    }
+                });
+            });
+        }
+
+        // --- Example Usage ---
+        // You must wrap your logic in an async function to use 'await'
+        async function testPrompt() {
+            // This is how you would use it in your application
+            const result = await aestheticPrompt("Enter the new content for your note:", "Raat Baki nh hay");
+
+            if (result !== null) {
+                alert(`User entered: "${result}"`);
+                // Your existing logic to call the Spring Boot API goes here
+            } else {
+                alert("User canceled the operation.");
+            }
+        }
+    </script>
+
+</body>
+</html>

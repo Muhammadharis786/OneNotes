@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        #error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Login</h1>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+          
+  
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+          
+  
+
+        <button type="submit">Login</button>
+    </form>
+    <p id="error-message"></p>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            const verifyApiUrl = 'https://onenote-3.onrender.com/api/user/getuser';
+
+            errorMessage.textContent = 'Verifying...';
+
+            // Step 1: Request ko POST method ke saath banayein
+            fetch(verifyApiUrl, {
+                method: 'POST', // Method ko POST karein
+                headers: {
+                    // Step 2: Server ko batayein ke hum JSON data bhej rahe hain
+                    'Content-Type': 'application/json'
+                },
+                // Step 3: Username aur password ko JSON string bana kar body mein bhejein
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                } )
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Login kamyab! Ab aage ki API calls ke liye Basic Auth credentials banayein
+                    const credentials = btoa(`${username}:${password}`);
+                    
+                    localStorage.setItem('loggedInUser', username);
+                    localStorage.setItem('apiToken', credentials);
+                    
+                    window.location.href = 'notes.html';
+                } else {
+                    // Agar server ne 401, 404, ya 500 bheja
+                    throw new Error('Invalid username or password.');
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = error.message;
+            });
+        });
+    </script>
+</body>
+</html>
