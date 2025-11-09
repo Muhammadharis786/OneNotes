@@ -6,32 +6,183 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <meta charset="UTF-8">
-    <title>My Notes</title>
+    <title>My Notes - Modern Art</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
-      
+        /* --- Color Palette from login.html --- */
+        :root {
+            --color-white: #ffffff;
+            --color-light-bg: #e7f1ff; /* Primary Background */
+            --color-dark-text: #333131; /* Primary Text/Button Background */
+            --color-secondary-text: #555353; /* Secondary Text */
+            --color-accent: #4a90e2; /* Interactive Elements */
+            --color-error: #e74c3c;
+            --color-success: #2ecc71; /* Green for success/add button */
+            --color-card-bg: #ffffff; /* Note Card Background */
+        }
 
-:root {
-    --color-background:#ffffff; /* Apne page ka main background color */
-    --color-card:#e7f1ff;       /* Popup ka background color */
-    --color-text-primary: #333131; /* Text ka color */
-    --color-accent: #14002d;     /* OK button aur focus ka color */
-    /* ... baaki variables ... */
-}
-
-
-        /* Global Styles (Minimal ) */
+        /* --- Global Styles --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
       
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: var(--color-light-bg);
+            color: var(--color-dark-text);
+            line-height: 1.6;
+            padding: 0;
+        }
 
-        /* --- Modal Structure --- */
+        /* --- Main Layout Arrangement (Modern Website Look) --- */
+        #notes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-        /* The Overlay */
+        /* Header/Top Bar */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(51, 49, 49, 0.1); /* Subtle separator */
+        }
+
+        .header-bar h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--color-dark-text);
+        }
+
+        .header-bar #username-display {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* --- Button Styling (Matching login.html) --- */
+        .modern-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            letter-spacing: 0.5px;
+        }
+
+        /* Logout Button Style */
+        #logoutButton {
+            background-color: var(--color-dark-text);
+            color: var(--color-white);
+        }
+
+        #logoutButton:hover {
+            background-color: var(--color-secondary-text);
+        }
+
+        /* Add Note Button Style (Using a complementary color) */
+        #addNoteButton {
+            background-color: var(--color-success);
+            color: var(--color-white);
+        }
+
+        #addNoteButton:hover {
+            background-color: #27ae60; /* Darker green */
+        }
+
+        /* --- Notes List Layout --- */
+        #nolist {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: var(--color-secondary-text);
+        }
+
+        .listofnotes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 30px;
+        }
+
+        .notes {
+            background-color: var(--color-card-bg);
+            padding: 25px;
+            border-radius: 15px; /* Softer corners */
+            min-height: 200px;
+            max-height: 350px;
+            overflow-y: auto; 
+            scrollbar-width: thin;
+            transition: 0.3s all ease-in-out; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+            position: relative;
+        }
+
+        .notes:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px); /* Subtle lift effect */
+        }
+
+        /* --- Note Content Styling --- */
+        .id_icon {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(51, 49, 49, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .id_icon .note-id {
+            font-weight: 700;
+            font-size: 0.9em;
+            color: var(--color-secondary-text);
+            background-color: var(--color-light-bg);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .id_icon .note-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-secondary-text);
+            margin-left: 10px;
+            transition: color 0.2s, transform 0.2s;
+            font-size: 1.1em;
+        }
+
+        .id_icon .note-actions button:hover {
+            transform: scale(1.1);
+        }
+
+        .id_icon .note-actions .dlt-note:hover {
+            color: var(--color-error); /* Red for delete */
+        }
+
+        .id_icon .note-actions .UpdateNotes:hover {
+            color: var(--color-accent); /* Blue for update */
+        }
+
+        .note-content {
+            display: block;
+            font-size: 1em;
+            color: var(--color-dark-text);
+            white-space: pre-wrap; /* Preserve formatting */
+        }
+
+        /* --- Modal Structure (Keeping original modal styles for consistency) --- */
         #aesthetic-prompt-overlay {
             position: fixed;
             top: 0;
@@ -39,7 +190,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            display: none; /* Hidden by default */
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -52,12 +203,11 @@
             opacity: 1;
         }
 
-        /* The Modal Content */
         #aesthetic-prompt-modal {
-            background-color: var(--color-card);
+            background-color: var(--color-light-bg); /* Using light-bg for modal */
             border-radius: 12px;
             width: 90%;
-            max-width: 450px; /* Smaller size for a prompt */
+            max-width: 450px;
             padding: 30px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
             transform: scale(0.9);
@@ -68,23 +218,20 @@
             transform: scale(1);
         }
 
-        /* --- Content Styling --- */
-
         #prompt-title {
             font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 20px;
-            color: var(--color-text-primary);
+            color: var(--color-dark-text);
         }
 
         #prompt-input {
             width: 100%;
             padding: 12px;
-            background-color: var(--color-background);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--color-white);
+            border: 1px solid rgba(51, 49, 49, 0.2);
             border-radius: 6px;
-            color: var(--color-text-primary);
-            font-family: var(--font-mono);
+            color: var(--color-dark-text);
             font-size: 1rem;
             transition: border-color 0.3s, box-shadow 0.3s;
             margin-bottom: 20px;
@@ -93,10 +240,9 @@
         #prompt-input:focus {
             outline: none;
             border-color: var(--color-accent);
-            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
         }
 
-        /* --- Buttons --- */
         .prompt-actions {
             display: flex;
             justify-content: flex-end;
@@ -107,7 +253,6 @@
             padding: 10px 20px;
             border: none;
             border-radius: 6px;
-            font-family: var(--font-mono);
             font-size: 0.9rem;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s;
@@ -115,124 +260,64 @@
         }
 
         #prompt-ok-btn {
-            background-color: var(--color-accent);
-            color: var(--color-background);
+            background-color: var(--color-dark-text); /* Using dark-text for OK button */
+            color: var(--color-white);
         }
 
         #prompt-ok-btn:hover {
-            background-color: #A572F0;
+            background-color: var(--color-secondary-text);
         }
 
         #prompt-cancel-btn {
-            background-color: var(--color-card);
-            color: var(--color-text-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--color-white);
+            color: var(--color-dark-text);
+            border: 1px solid rgba(51, 49, 49, 0.2);
         }
 
         #prompt-cancel-btn:hover {
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: var(--color-light-bg);
         }
 
-
-
-      
-      body {
-    font-family: "Montserrat", sans-serif;
-    background-color: #e7f1ff;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
-}
-
-        #nolist {
-        display: none;
-       }
-.listofnotes {
-
-  display: flex;
-  flex-wrap: wrap; /* 👈 allows multiple rows if screen is small */
-  gap: 20px; /* space between notes */
-  justify-content: flex-start; /* optional: align left */
-}
-
-.notes {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    max-height: 300px;
-    width: 300px;
-    /* FIX: Change 'scroll' to 'auto' */
-    overflow-y: auto; 
-    scrollbar-width: thin;
-    transition: 0.2s all ease-in-out; 
-    scrollbar-color: #888 #f1f1f1;
-    /* Removed the conflicting 'height: 500px;' property */
-}
-
-.notes:hover {
-        box-shadow:-1px 4px 7px 1px silver;
- 
-    transform: scale(1.0);
-}
-
-
-       .id_icon {
-        margin-top: 12px;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-       }
-           .id_icon   .note-id {
+        .update-message {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--color-success);
             font-weight: bold;
-            font-size: 14px;
-            margin-right: 10px;
-           }
-           .id_icon button {
-            background-color: white;
-            border: none;
-           }
-  .id_icon  i{
-    transition: 0.2s all;
-  }
-           .id_icon  i:hover {
-           transform: scale(1.2);
-            color: red;
-            cursor: pointer;
-           }
+        }
     </style>
 </head>
 <body>
 
     <div id="notes-container">
-        <h1>Notes for <span id="username-display"></span></h1>
-        <p id="loading-message">Loading your notes...</p>
-        <div id="nolist">
-            
-        <p>
-                Apkay pass koy list nh hay
-        </p>
-    </div>
-
-    <div class="update-message">
-        
-    </div>
-        <button onclick="addnotes()">Add Note</button>
-        <div id="notes-list"   class="listofnotes">
-
-            <!-- ye wo chixay hay jo script may lagani hay -->
-
- 
-           
-
-
-            
-        
+        <div class="header-bar">
+            <h1>Notes for <span id="username-display"></span></h1>
+            <div class="action-buttons">
+                <!-- Changed to a modern-button class and ID for styling -->
+                <button id="addNoteButton" class="modern-button" onclick="addnotes()">
+                    <i class="fas fa-plus"></i> Add Note
+                </button>
+                <!-- Changed to a modern-button class -->
+                <button id="logoutButton" class="modern-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </div>
-        <button id="logoutButton">Logout</button>
+
+        <p id="loading-message">Loading your notes...</p>
+        
+        <div id="nolist">
+            <p>Apkay pass koy list nh hay</p>
+        </div>
+
+        <div class="update-message"></div>
+        
+        <div id="notes-list" class="listofnotes">
+            <!-- Notes will be dynamically inserted here -->
+        </div>
     </div>
 
-     <div id="aesthetic-prompt-overlay">
+    <!-- Modal for Prompt -->
+    <div id="aesthetic-prompt-overlay">
         <div id="aesthetic-prompt-modal">
             <p id="prompt-title">Enter your value:</p>
             <input type="text" id="prompt-input">
@@ -244,34 +329,65 @@
     </div>
 
     <script>
- const loggedInUser = localStorage.getItem('loggedInUser');
-            const apiToken = localStorage.getItem('apiToken');
-      
-        document.addEventListener('DOMContentLoaded', function() {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const apiToken = localStorage.getItem('apiToken');
+        const notesApiUrl = 'https://onenote-3.onrender.com/api/getNotesByOwner';
+        const addNoteApiUrl = 'https://onenote-3.onrender.com/api/addNote';
+        const deleteNoteApiUrl = 'https://onenote-3.onrender.com/api/DeleteNote'; // Base URL for DELETE
+        const updateNoteApiUrl = 'https://onenote-3.onrender.com/api/UpdateNote';
+
+        // --- Utility Functions ---
+
+        function showUpdateMessage(message, isError = false) {
+            const updateMessageDiv = document.querySelector('.update-message');
+            updateMessageDiv.textContent = message;
+            updateMessageDiv.style.color = isError ? 'var(--color-error)' : 'var(--color-success)';
+            setTimeout(() => {
+                updateMessageDiv.textContent = '';
+            }, 3000);
+        }
+
+        function createNoteElement(note) {
+            const listItem = document.createElement('div');
+            listItem.innerHTML = `
+                <div class="notes">
+                    <div class="note">
+                        <div class="id_icon">
+                            <div>
+                                <span class="note-id" data-noteid="${note.noteid}">Note ID: ${note.noteid}</span>
+                            </div>
+                            <div class="note-actions">
+                                <button class="UpdateNotes" onclick="UpdateNote(${note.noteid})"> 
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="dlt-note" onclick="deleteNote(${note.noteid})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span class="note-content">${note.content}</span>
+                    </div>
+                </div>
+            `;
+            return listItem;
+        }
+
+        function loadNotes() {
             const usernameDisplay = document.getElementById('username-display');
             const notesList = document.getElementById('notes-list');
-            const notelist2 = document.getElementById('nolist');
+            const nolist = document.getElementById('nolist');
             const loadingMessage = document.getElementById('loading-message');
-            
-            const loggedInUser = localStorage.getItem('loggedInUser');
-            const apiToken = localStorage.getItem('apiToken');
 
-            if (!loggedInUser || !apiToken) {
-                alert('Aap logged in nahi hain. Baraye meharbani login karein.');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            usernameDisplay.textContent = loggedInUser;
-
-            const notesApiUrl = 'https://onenote-3.onrender.com/api/getNotesByOwner';
+            notesList.innerHTML = ''; // Clear existing notes
+            loadingMessage.style.display = 'block';
+            nolist.style.display = 'none';
 
             fetch(notesApiUrl, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Basic ${apiToken}`
                 }
-            } )
+            })
             .then(response => {
                 if (response.status === 401) {
                     throw new Error('Authentication failed. Please login again.');
@@ -283,259 +399,189 @@
             })
             .then(notes => {
                 loadingMessage.style.display = 'none';
-          
-
+                
                 if (!Array.isArray(notes) || notes.length === 0) {
-
-                    notelist2.style.display = 'block';
-                  
+                    nolist.style.display = 'block';
                 } else {
-                    // *** YAHAN TABDEELI KI GAYI HAI ***
-                    // Har note ke liye ek list item banayein
                     notes.forEach(note => {
-                        const listItem = document.createElement('div');
-                        
-                        // Aapke JSON structure ke mutabiq 'noteid' aur 'content' istemal karein
-                        // 'ownerName' ko ignore kar diya gaya hai
-                        listItem.innerHTML = `
-                                     
-<div class="notes">
-  <div class="note">
-    <div class="id_icon">
-
-      <!-- Note ID -->
-      <div>
-        <span class="note-id">${note.noteid}</span>
-      </div>
-
-      <!-- Action Buttons -->
-      <div>
-        <button class="dlt-note" onclick="deleteNote(${note.noteid})">
-          <i class="fas fa-trash"></i>
-        </button>
-            <button  class="UpdateNotes"  onclick="UpdateNote (${note.noteid})"> 
-
-            <i class="fa-solid fa-pen-to-square"></i>
-
-            </button>
-    
-      </div>
-
-    </div>
-
-    <!-- Note Content -->
-    <div>
-      <span class="note-content">${note.content}</span>
-    </div>
-
-  </div>
-</div>
-
-                        `;
-                        
-                        notesList.appendChild(listItem);
+                        notesList.appendChild(createNoteElement(note));
                     });
                 }
             })
             .catch(error => {
                 loadingMessage.textContent = `Error: ${error.message}`;
+                showUpdateMessage(`Error: ${error.message}`, true);
                 if (error.message.includes('Authentication failed')) {
                     setTimeout(() => {
                         document.getElementById('logoutButton').click();
                     }, 2000);
                 }
             });
-        });
+        }
 
+        // --- Prompt Modal Logic ---
 
-    function deleteNote(noteId) {
-      if (confirm("Are you sure you want to delete this note?")) {
-        fetch(`https://onenote-3.onrender.com/api/DeleteNote/${noteId}`, {
-          method: "DELETE",
-            headers: {
-                    'Authorization': `Basic ${apiToken}`
-                }
-        })
-          .then((res) => {
-            if (res.ok) {
-              alert("Note deleted successfully!");
-               location.reload();
-            
-            } else {
-              alert("Failed to delete note!");
-            }
-          })
-          .catch((err) => {
-            console.error("Error deleting note:", err);
-            alert("Error occurred while deleting note!");
-          });
-      }
-    }
+        let promptResolve;
+        let promptReject;
 
+        function showPrompt(title, defaultValue = '') {
+            const overlay = document.getElementById('aesthetic-prompt-overlay');
+            const modal = document.getElementById('aesthetic-prompt-modal');
+            const input = document.getElementById('prompt-input');
+            const titleEl = document.getElementById('prompt-title');
 
-     async  function addnotes () {
-            const noteContent =  await aestheticPrompt("Add Notes", ""); ;
-            if (noteContent) {
-                fetch('https://onenote-3.onrender.com/api/addNote', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${apiToken}`
-                    },
-                    body: JSON.stringify({
-                     
-                        content: noteContent
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Note added successfully!');
-                        location.reload();
-                    } else {
-                        throw new Error('Failed to add note.');
-                    }
-                })
-                .catch(error => {
-                    alert(`Error: ${error.message}`);
-                });
-            }
-    }
+            titleEl.textContent = title;
+            input.value = defaultValue;
+            overlay.classList.add('active');
+            input.focus();
 
-
-
-    async function UpdateNote(noteId) {
-         const newContent =  await aestheticPrompt("Update your note:", ""); ;
-         
-if (newContent) {
-
-        fetch('https://onenote-3.onrender.com/api/UpdateNote', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${apiToken}`
-                    },
-                    body: JSON.stringify({
-                        noteid: noteId,
-                        content: newContent,
-                        ownerName: loggedInUser
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Note updated successfully!');
-                        location.reload();
-                    } 
-                        if(response.status === 400) {
-
-                        throw new Error('Bad Request: Please check the note details.');
-                        }
-                    else {
-                        throw new Error('Failed to update note.');
-                    }
-                })
-
-                
-
-}
-else {
-    const updateNessage  = document.getElementById('update-message');
-    updateNessage.innerText = 'not provide your content';
-
-
-
-    updateNessage.textContent = 'Update cancelled: No content provided.';
-}
-
-
-     }
-
-
-
-      const overlay = document.getElementById('aesthetic-prompt-overlay');
-        const titleElement = document.getElementById('prompt-title');
-        const inputElement = document.getElementById('prompt-input');
-        const okButton = document.getElementById('prompt-ok-btn');
-        const cancelButton = document.getElementById('prompt-cancel-btn');
-
-        /**
-         * Displays an aesthetic prompt modal and returns a Promise that resolves with the user's input.
-         * @param {string} title The message to display in the prompt.
-         * @param {string} [defaultValue=''] The default value for the text input.
-         * @returns {Promise<string|null>} The user's input string, or null if canceled.
-         */
-        function aestheticPrompt(title, defaultValue = '') {
-            return new Promise(resolve => {
-                // 1. Setup the modal content
-                titleElement.textContent = title;
-                inputElement.value = defaultValue;
-                inputElement.focus();
-
-                // 2. Show the modal
-                overlay.classList.add('active');
-
-                // 3. Define the handlers
-                const handleOk = () => {
-                    cleanup();
-                    resolve(inputElement.value);
-                };
-
-                const handleCancel = () => {
-                    cleanup();
-                    resolve(null);
-                };
-
-                const handleKeydown = (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault(); // Prevent form submission if any
-                        handleOk();
-                    } else if (e.key === 'Escape') {
-                        handleCancel();
-                    }
-                };
-
-                // 4. Attach event listeners
-                okButton.addEventListener('click', handleOk);
-                cancelButton.addEventListener('click', handleCancel);
-                inputElement.addEventListener('keydown', handleKeydown);
-
-                // 5. Cleanup function to remove listeners and hide modal
-                const cleanup = () => {
-                    overlay.classList.remove('active');
-                    okButton.removeEventListener('click', handleOk);
-                    cancelButton.removeEventListener('click', handleCancel);
-                    inputElement.removeEventListener('keydown', handleKeydown);
-                };
-
-                // Optional: Close on overlay click
-                overlay.addEventListener('click', (e) => {
-                    if (e.target === overlay) {
-                        handleCancel();
-                    }
-                });
+            return new Promise((resolve, reject) => {
+                promptResolve = resolve;
+                promptReject = reject;
             });
         }
 
-        // --- Example Usage ---
-        // You must wrap your logic in an async function to use 'await'
-        async function testPrompt() {
-            // This is how you would use it in your application
-            const result = await aestheticPrompt("Enter the new content for your note:", "Raat Baki nh hay");
+        function hidePrompt() {
+            document.getElementById('aesthetic-prompt-overlay').classList.remove('active');
+        }
 
-            if (result !== null) {
-                alert(`User entered: "${result}"`);
-                // Your existing logic to call the Spring Boot API goes here
+        document.getElementById('prompt-ok-btn').addEventListener('click', () => {
+            const value = document.getElementById('prompt-input').value;
+            hidePrompt();
+            if (promptResolve) promptResolve(value);
+        });
+
+        document.getElementById('prompt-cancel-btn').addEventListener('click', () => {
+            hidePrompt();
+            if (promptResolve) promptResolve(null); // Resolve with null on cancel to prevent promise rejection
+        });
+
+        // --- Action Functions ---
+
+        function addnotes() {
+            showPrompt('Enter new note content:')
+                .then(content => {
+                    if (!content || content.trim() === '') {
+                        showUpdateMessage('Note content cannot be empty.', true);
+                        return;
+                    }
+                    
+                    fetch(addNoteApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Basic ${apiToken}`
+                        },
+                        body: JSON.stringify({
+                            ownerName: loggedInUser,
+                            content: content.trim()
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Note add nahi ho saka.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        showUpdateMessage('Note successfully added!');
+                        loadNotes(); // Reload notes list
+                    })
+                    .catch(error => {
+                        showUpdateMessage(`Error adding note: ${error.message}`, true);
+                    });
+                })
+                .catch(() => {
+                    // User cancelled the prompt
+                });
+        }
+
+        function deleteNote(noteid) {
+            if (!confirm(`Are you sure you want to delete Note ID: ${noteid}?`)) {
+                return;
+            }
+
+            fetch(`${deleteNoteApiUrl}/${noteid}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Basic ${apiToken}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Note delete nahi ho saka.');
+                }
+                // Do not attempt to parse JSON if the API returns plain text on success
+                showUpdateMessage('Note successfully deleted!');
+                loadNotes(); // Reload notes list
+            })
+            .catch(error => {
+                showUpdateMessage(`Error deleting note: ${error.message}`, true);
+            });
+        }
+
+        async function UpdateNote(noteid) {
+            // Find the current content of the note to pre-fill the prompt
+            const noteElement = document.querySelector(`.note-id[data-noteid="${noteid}"]`).closest('.notes');
+            const currentContent = noteElement ? noteElement.querySelector('.note-content').textContent : '';
+
+            const newContent = await showPrompt(`Update content for Note ID: ${noteid}`, currentContent);
+
+            if (newContent) {
+                try {
+                    const response = await fetch(updateNoteApiUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Basic ${apiToken}`
+                        },
+                        body: JSON.stringify({
+                            noteid: noteid,
+                            content: newContent,
+                            ownerName: loggedInUser
+                        })
+                    });
+
+                    if (response.ok) {
+                        showUpdateMessage('Note successfully updated!');
+                        loadNotes(); // Reload notes list
+                    } else if (response.status === 400) {
+                        throw new Error('Bad Request: Please check the note details.');
+                    } else {
+                        throw new Error('Failed to update note.');
+                    }
+                } catch (error) {
+                    showUpdateMessage(`Error updating note: ${error.message}`, true);
+                }
+            } else if (newContent === null) {
+                // User cancelled the prompt, do nothing
             } else {
-                alert("User canceled the operation.");
+                // This case should not happen with the current prompt logic, but for safety:
+                showUpdateMessage('Update cancelled: No content provided.', true);
             }
         }
 
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            localStorage.removeItem('loggedInUser');
-            localStorage.removeItem('apiToken');
-            alert('Aap logout ho chuke hain.');
-            window.location.href = 'login.html';
+        // --- Initialization ---
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (!loggedInUser || !apiToken) {
+                alert('Aap logged in nahi hain. Baraye meharbani login karein.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            usernameDisplay.textContent = loggedInUser;
+            loadNotes();
+
+            // Logout functionality
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                localStorage.removeItem('loggedInUser');
+                localStorage.removeItem('apiToken');
+                window.location.href = 'login.html';
+            });
         });
     </script>
 </body>
-
 </html>
